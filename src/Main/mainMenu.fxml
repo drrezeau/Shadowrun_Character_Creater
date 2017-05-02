@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="920.0" prefWidth="1200.0" stylesheets="@../Styles/myStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main.MainMenuController">
+   <top>
+      <MenuBar styleClass="menuBar" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Save as PDF" />
+                  <MenuItem mnemonicParsing="false" text="Save to Local" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit" />
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="characterDetails" text="Character Details">
+               <content>
+                  <AnchorPane fx:id="test" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+          </Tab>
+          <Tab fx:id="Skills" text="Skills">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="skillsList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterSkillsList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" onAction="#addSkillsToCharacter" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" onAction="#removeSkillsFromCharacter" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+            <Tab fx:id="Qualities" text="Qualities">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="qualitiesList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterQualitiesList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="RangedWeapons" text="Ranged Weapons">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="rangedWeaponsList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterRangedWeaponsList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="MeleeWeapons" text="Melee Weapons">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="meleeWeaponsList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterMeleeWeaponsList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="Armor" text="Armor">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="armorList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterArmorList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="Augmentations" text="Augmentations">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="AugmentationsList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterAugmentationsList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="Vehicles" text="Vehicles">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="807.0" prefWidth="1200.0">
+                     <children>
+                        <ScrollPane layoutX="14.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="vehiclesList" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="682.0" layoutY="43.0" prefHeight="672.0" prefWidth="504.0">
+                           <content>
+                              <VBox fx:id="characterVehiclesList" />
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="549.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Add" />
+                        <Button layoutX="549.0" layoutY="136.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Remove" />
+                        <Button layoutX="682.0" layoutY="734.0" mnemonicParsing="false" onAction="#SelectAll" prefHeight="37.0" prefWidth="141.0" text="Select All" />
+                        <Button layoutX="838.0" layoutY="734.0" mnemonicParsing="false" onAction="#deselectAll" prefHeight="37.0" prefWidth="143.0" text="Deselect All" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <bottom>
+      <MenuBar prefHeight="9.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Karma Left:" />
+          <Menu mnemonicParsing="false" text="Character Name:" />
+        </menus>
+      </MenuBar>
+   </bottom>
+</BorderPane>

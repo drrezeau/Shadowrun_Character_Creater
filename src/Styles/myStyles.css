@@ -1,0 +1,47 @@
+.root
+{
+    -fx-font-size: 12pt;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New";
+}
+
+.tab-pane .tab-content-area
+{
+	-fx-background-color: #47100c;	
+}
+
+.tab-pane .tab
+{
+	-fx-background-color: rgb(160, 147, 151);
+}
+
+.tab-pane .tab:selected
+{
+	-fx-background-color: #47100c;
+}
+
+.tab:selected .tab-label
+{
+	-fx-text-fill: white;
+}
+
+.button
+{
+
+    -fx-font-size: 12pt;
+    -fx-background-color: #6F112D; /*#A34641*/
+    -fx-text-fill: white;
+}
+
+.MenuItem .menuBar .Menu
+{
+	fx-text-fill: white;
+}
+.list-view .list-cell:even {
+-fx-background-color: #6F112D;
+-fx-text-fill: white;
+}
+.list-view .list-cell:odd {
+-fx-background-color: black;
+-fx-text-fill: white;
+}
