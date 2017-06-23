@@ -32,7 +32,16 @@
         <tabs>
           <Tab fx:id="characterDetails" text="Character Details">
                <content>
-                  <AnchorPane fx:id="test" prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="72.0" layoutY="60.0" prefWidth="200.0" text="Player Name: " />
+                        <Label layoutX="72.0" layoutY="109.0" prefWidth="200.0" text="Character Name:" />
+                        <Label layoutX="72.0" layoutY="157.0" prefWidth="200.0" text="Character Alias:" />
+                        <TextField fx:id="playerName" layoutX="302.0" layoutY="55.0" />
+                        <TextField fx:id="characterName" layoutX="302.0" layoutY="104.0" />
+                        <TextField fx:id="characterAlias" layoutX="302.0" layoutY="152.0" />
+                        <ComboBox fx:id="metatypeBox" layoutX="72.0" layoutY="215.0" prefHeight="39.0" prefWidth="369.0" />
+                     </children></AnchorPane>
                </content>
           </Tab>
           <Tab fx:id="Skills" text="Skills">
@@ -193,11 +202,10 @@
       </TabPane>
    </center>
    <bottom>
-      <MenuBar prefHeight="9.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Karma Left:" />
-          <Menu mnemonicParsing="false" text="Character Name:" />
-        </menus>
-      </MenuBar>
+      <HBox prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="karmaLeftOver" prefHeight="41.0" prefWidth="183.0" text="Karma:" />
+         </children>
+      </HBox>
    </bottom>
 </BorderPane>

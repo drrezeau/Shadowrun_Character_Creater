@@ -10,6 +10,11 @@
 	-fx-background-color: #47100c;	
 }
 
+.tab-pane .tab-content-area .label
+{
+	-fx-text-fill:white;
+}
+
 .tab-pane .tab
 {
 	-fx-background-color: rgb(160, 147, 151);
@@ -38,10 +43,18 @@
 	fx-text-fill: white;
 }
 .list-view .list-cell:even {
--fx-background-color: #6F112D;
+-fx-background-color: #47100c;
+-fx-text-fill: white;
+}
+#even {
+-fx-background-color: #47100c;
 -fx-text-fill: white;
 }
 .list-view .list-cell:odd {
+-fx-background-color: black;
+-fx-text-fill: white;
+}
+#odd {
 -fx-background-color: black;
 -fx-text-fill: white;
 }
