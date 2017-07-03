@@ -9,12 +9,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import Main.SkillsController.SKILL_GROUPS;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -37,52 +40,74 @@ import myPieces.NumberSpinner;
  */
 public class MainMenuController implements Initializable
 {
-	SimpleStringProperty startingKarma = new SimpleStringProperty();
+	SimpleStringProperty	startingKarma	= new SimpleStringProperty();
+	SimpleStringProperty	skillKarma		= new SimpleStringProperty();
+	SimpleStringProperty	posQualityKarma	= new SimpleStringProperty();
+	SimpleStringProperty	negQualityKarma	= new SimpleStringProperty();
 
 	@FXML
-	VBox skillsList;
+	VBox					skillsList;
 	@FXML
-	VBox qualitiesList;
+	VBox					posQualitiesList;
 	@FXML
-	VBox meleeWeaponsList;
+	VBox					negQualitiesList;
 	@FXML
-	VBox rangedWeaponsList;
+	VBox					meleeWeaponsList;
 	@FXML
-	VBox armorList;
+	VBox					rangedWeaponsList;
 	@FXML
-	VBox AugmentationsList;
+	VBox					armorList;
 	@FXML
-	VBox vehiclesList;
+	VBox					AugmentationsList;
+	@FXML
+	VBox					vehiclesList;
 
 	@FXML
-	VBox characterSkillsList;
+	VBox					characterSkillsList;
 	@FXML
-	VBox characterQualitiesList;
+	VBox					characterPosQualitiesList;
 	@FXML
-	VBox characterMeleeWeaponsList;
+	VBox					characterNegQualitiesList;
 	@FXML
-	VBox characterRangedWeaponsList;
+	VBox					characterMeleeWeaponsList;
 	@FXML
-	VBox characterArmorList;
+	VBox					characterRangedWeaponsList;
 	@FXML
-	VBox characterAugmentationsList;
+	VBox					characterArmorList;
 	@FXML
-	VBox characterVehiclesList;
+	VBox					characterAugmentationsList;
+	@FXML
+	VBox					characterVehiclesList;
 
 	///////////////////
 	// Character Tab //
 	///////////////////
 	@FXML
-	TextField playerName;
+	TextField				playerName;
 	@FXML
-	TextField characterName;
+	TextField				characterName;
 	@FXML
-	TextField characterAlias;
+	TextField				characterAlias;
 	@FXML
-	ComboBox<String> metatypeBox;
+	ComboBox<String>		metatypeBox;
 
+	////////////////
+	// Skills Tab //
+	////////////////
 	@FXML
-	Label karmaLeftOver;
+	ComboBox<String>		sortSkills;
+
+	/////////////////////
+	// Things To Track //
+	/////////////////////
+	@FXML
+	Label					karmaLeftOver;
+	@FXML
+	Label					karmaSpentSkills;
+	@FXML
+	Label					karmaSpentPosQualities;
+	@FXML
+	Label					karmaSpentNegQualities;
 
 	/////////////////
 	// Used By All //
@@ -94,7 +119,7 @@ public class MainMenuController implements Initializable
 		case "Skills":
 			return characterSkillsList;
 		case "Qualities":
-			return characterQualitiesList;
+			return characterPosQualitiesList;
 		}
 		return null;
 	}
@@ -130,7 +155,7 @@ public class MainMenuController implements Initializable
 	////////////
 	// Skills //
 	////////////
-	private void addSkill(DB_Skill skill)
+	public void addSkill(DB_Skill skill)
 	{
 		HBox hb = new HBox();
 		hb.setPadding(new Insets(5, 5, 5, 5));
@@ -147,8 +172,7 @@ public class MainMenuController implements Initializable
 		if (Shadowrun_Globals.skills.indexOf(skill) % 2 == 0)
 		{
 			hb.setId("even");
-		}
-		else
+		} else
 		{
 			hb.setId("odd");
 		}
@@ -156,7 +180,7 @@ public class MainMenuController implements Initializable
 
 	}
 
-	private void addSkillWithRatingBox(String skill)
+	public void addSkillWithRatingBox(DB_Skill skill)
 	{
 		HBox hb = new HBox();
 		hb.setPadding(new Insets(5, 5, 5, 5));
@@ -164,14 +188,35 @@ public class MainMenuController implements Initializable
 		hb.getChildren().add(cb);
 		HBox.setMargin(cb, new Insets(0, 5, 0, 5));
 
-		Label lb = new Label(skill);
-		lb.setTooltip(new Tooltip(skill));
+		Label lb = new Label(skill.getSkill());
+		lb.setTooltip(new Tooltip(skill.getSkill()));
 		lb.setAlignment(Pos.CENTER);
 		lb.setPrefWidth(280);
 		hb.getChildren().add(lb);
 		HBox.setMargin(lb, new Insets(0, 5, 0, 5));
 
 		NumberSpinner ns = new NumberSpinner(1, 6);
+
+		ns.getNumberField().textProperty().addListener(new ChangeListener<Object>()
+		{
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void changed(ObservableValue arg0, Object arg1, Object arg2)
+			{
+				System.out.println(arg1);
+				System.out.println(arg2);
+				int oldRating = Integer.parseInt((String) arg1);
+				int newRating = Integer.parseInt((String) arg2);
+
+				int karmaCost = SkillsController.updateKarma(newRating) - SkillsController.updateKarma(oldRating);
+
+				ThingsToTrack.karmaSpentOnSkills += karmaCost;
+				skillKarma.set(Integer.toString(ThingsToTrack.karmaSpentOnSkills));
+				ThingsToTrack.overallKarma -= karmaCost;
+				startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+			}
+		});
+
 		hb.getChildren().add(ns);
 		HBox.setMargin(cb, new Insets(0, 5, 0, 5));
 
@@ -183,8 +228,7 @@ public class MainMenuController implements Initializable
 		if (characterSkillsList.getChildren().size() % 2 == 0)
 		{
 			hb.setId("even");
-		}
-		else
+		} else
 		{
 			hb.setId("odd");
 		}
@@ -194,11 +238,21 @@ public class MainMenuController implements Initializable
 	@FXML
 	public void addSkillsToCharacter()
 	{
+		System.out.println("adding skill...");
 		for (int i = 0; i < skillsList.getChildren().size(); i++)
 		{
 			if (((CheckBox) ((HBox) skillsList.getChildren().get(i)).getChildren().get(0)).isSelected())
 			{
-				addSkillWithRatingBox(((Label) ((HBox) skillsList.getChildren().get(i)).getChildren().get(1)).getText());
+				int karmaCost = SkillsController.updateKarma(1);
+
+				ThingsToTrack.karmaSpentOnSkills += karmaCost;
+				skillKarma.set(Integer.toString(ThingsToTrack.karmaSpentOnSkills));
+				ThingsToTrack.overallKarma -= karmaCost;
+				startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+
+				DB_Skill skillToAdd = Shadowrun_Globals.skills.get(i);
+				addSkillWithRatingBox(skillToAdd);
+				((CheckBox) ((HBox) skillsList.getChildren().get(i)).getChildren().get(0)).setSelected(false);
 			}
 		}
 	}
@@ -212,16 +266,50 @@ public class MainMenuController implements Initializable
 		{
 			if (((CheckBox) ((HBox) characterSkillsList.getChildren().get(i)).getChildren().get(0)).isSelected())
 			{
+				int value = ((NumberSpinner) ((HBox) characterSkillsList.getChildren().get(i)).getChildren().get(2)).getNumber().intValue();
+
+				int karmaCost = SkillsController.updateKarma(value);
+
+				ThingsToTrack.karmaSpentOnSkills -= karmaCost;
+				skillKarma.set(Integer.toString(ThingsToTrack.karmaSpentOnSkills));
+				ThingsToTrack.overallKarma += karmaCost;
+				startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
 				myCol.add(((HBox) characterSkillsList.getChildren().get(i)));
 			}
 		}
 		characterSkillsList.getChildren().removeAll(myCol);
 	}
 
+	@FXML
+	public void sortSkills()
+	{
+		String skillGroup = sortSkills.getValue();
+		System.out.println(skillGroup);
+
+		if (skillGroup.equals("ALL"))
+		{
+			skillsList.getChildren().clear();
+			for (DB_Skill s : Shadowrun_Globals.skills)
+			{
+				addSkill(s);
+			}
+			return;
+		}
+
+		skillsList.getChildren().clear();
+		for (DB_Skill s : Shadowrun_Globals.skills)
+		{
+			if (s.getSKillGroup().equals(skillGroup))
+			{
+				addSkill(s);
+			}
+		}
+	}
+
 	///////////////
 	// Qualities //
 	///////////////
-	private void addQuality(DB_Quality quality)
+	public void addQuality(DB_Quality quality, boolean positive)
 	{
 		HBox hb = new HBox();
 		hb.setPadding(new Insets(5, 5, 5, 5));
@@ -237,15 +325,290 @@ public class MainMenuController implements Initializable
 		HBox.setMargin(lb, new Insets(0, 5, 0, 5));
 
 		hb.setPrefWidth(500);
-		if (Shadowrun_Globals.qualities.indexOf(quality) % 2 == 0)
+		if (positive)
 		{
-			hb.setId("even");
-		}
-		else
+			if (Shadowrun_Globals.posQualities.indexOf(quality) % 2 == 0)
+			{
+				hb.setId("even");
+			} else
+			{
+				hb.setId("odd");
+			}
+			posQualitiesList.getChildren().add(hb);
+		} else
 		{
-			hb.setId("odd");
+			if (Shadowrun_Globals.negQualities.indexOf(quality) % 2 == 0)
+			{
+				hb.setId("even");
+			} else
+			{
+				hb.setId("odd");
+			}
+			negQualitiesList.getChildren().add(hb);
 		}
-		qualitiesList.getChildren().add(hb);
+	}
+
+	public void addQualityToCharacter(DB_Quality quality)
+	{
+		HBox hb = new HBox();
+		hb.setPadding(new Insets(5, 5, 5, 5));
+		CheckBox cb = new CheckBox();
+		hb.getChildren().add(cb);
+		HBox.setMargin(cb, new Insets(0, 5, 0, 5));
+
+		Label lb = new Label(quality.getQuality());
+		lb.setTooltip(new Tooltip(quality.getNotes()));
+		Label cost = new Label(Integer.toString(quality.getKarmaCost()));
+		lb.setPrefWidth(280);
+		cost.setPrefWidth(40);
+		hb.getChildren().addAll(lb, cost);
+		HBox.setMargin(lb, new Insets(0, 5, 0, 5));
+
+		for (QualityController.qualitiesWithMultipleTimes q : QualityController.qualitiesWithMultipleTimes.values())
+		{
+			if (q.text.equals(quality.getQuality()))
+			{
+				NumberSpinner ns = new NumberSpinner(1, QualityController.getMaxTimes(quality.getQuality()), 100);
+				// ns.setWidth(100);
+				ns.getNumberField().textProperty().addListener(new ChangeListener<Object>()
+				{
+					@SuppressWarnings("rawtypes")
+					@Override
+					public void changed(ObservableValue arg0, Object arg1, Object arg2)
+					{
+						System.out.println(arg1);
+						System.out.println(arg2);
+						int oldRating = Integer.parseInt((String) arg1);
+						int newRating = Integer.parseInt((String) arg2);
+
+						int karmaCost = newRating * quality.getKarmaCost() - oldRating * quality.getKarmaCost();
+
+						if (quality.isPositive())
+						{
+							ThingsToTrack.positiveQualitiesKarmaCost += karmaCost;
+							posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+							ThingsToTrack.overallKarma -= karmaCost;
+							startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+						} else
+						{
+							ThingsToTrack.negativeQualitiesKarmaCost += karmaCost;
+							negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+							ThingsToTrack.overallKarma += karmaCost;
+							startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+						}
+
+						if (ThingsToTrack.positiveQualitiesKarmaCost + karmaCost > 25)
+						{
+							ns.getIncrementButton().setDisable(true);
+						} else
+						{
+							ns.getIncrementButton().setDisable(false);
+						}
+
+						if (ThingsToTrack.negativeQualitiesKarmaCost + karmaCost > 25)
+						{
+							ns.getIncrementButton().setDisable(true);
+						} else
+						{
+							ns.getIncrementButton().setDisable(false);
+						}
+					}
+				});
+
+				if (ThingsToTrack.positiveQualitiesKarmaCost + quality.getKarmaCost() > 25)
+				{
+					ns.getIncrementButton().setDisable(true);
+				}
+				if (ThingsToTrack.negativeQualitiesKarmaCost + quality.getKarmaCost() > 25)
+				{
+					ns.getIncrementButton().setDisable(true);
+				}
+				hb.getChildren().add(ns);
+			}
+		}
+
+		hb.setPrefWidth(500);
+
+		if (quality.isPositive())
+		{
+			if (Shadowrun_Globals.posQualities.indexOf(quality) % 2 == 0)
+			{
+				hb.setId("even");
+			} else
+			{
+				hb.setId("odd");
+			}
+			characterPosQualitiesList.getChildren().add(hb);
+		} else
+		{
+			if (Shadowrun_Globals.negQualities.indexOf(quality) % 2 == 0)
+			{
+				hb.setId("even");
+			} else
+			{
+				hb.setId("odd");
+			}
+			characterNegQualitiesList.getChildren().add(hb);
+
+		}
+	}
+
+	@FXML
+	public void addQualitiesToCharacter()
+	{
+		System.out.println("adding positive quality...");
+		for (int i = 0; i < posQualitiesList.getChildren().size(); i++)
+		{
+			if (((CheckBox) ((HBox) posQualitiesList.getChildren().get(i)).getChildren().get(0)).isSelected())
+			{
+				DB_Quality qualityToAdd = Shadowrun_Globals.posQualities.get(i);
+
+				int karmaCost = qualityToAdd.getKarmaCost();
+
+				if (ThingsToTrack.positiveQualitiesKarmaCost + karmaCost > 25)
+				{
+					break;
+				}
+
+				if (qualityToAdd.isPositive())
+				{
+					ThingsToTrack.positiveQualitiesKarmaCost += karmaCost;
+					posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+					ThingsToTrack.overallKarma -= karmaCost;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				} else
+				{
+					ThingsToTrack.negativeQualitiesKarmaCost += karmaCost;
+					negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+					ThingsToTrack.overallKarma += karmaCost;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				}
+
+				addQualityToCharacter(qualityToAdd);
+				((CheckBox) ((HBox) posQualitiesList.getChildren().get(i)).getChildren().get(0)).setSelected(false);
+			}
+		}
+
+		System.out.println("adding negative quality...");
+		for (int i = 0; i < negQualitiesList.getChildren().size(); i++)
+		{
+			if (((CheckBox) ((HBox) negQualitiesList.getChildren().get(i)).getChildren().get(0)).isSelected())
+			{
+				DB_Quality qualityToAdd = Shadowrun_Globals.negQualities.get(i);
+
+				int karmaCost = qualityToAdd.getKarmaCost();
+
+				if (ThingsToTrack.negativeQualitiesKarmaCost + karmaCost > 25)
+				{
+					break;
+				}
+
+				if (qualityToAdd.isPositive())
+				{
+					ThingsToTrack.positiveQualitiesKarmaCost += karmaCost;
+					posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+					ThingsToTrack.overallKarma -= karmaCost;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				} else
+				{
+					ThingsToTrack.negativeQualitiesKarmaCost += karmaCost;
+					negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+					ThingsToTrack.overallKarma += karmaCost;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				}
+
+				addQualityToCharacter(qualityToAdd);
+				((CheckBox) ((HBox) negQualitiesList.getChildren().get(i)).getChildren().get(0)).setSelected(false);
+			}
+		}
+
+	}
+
+	@FXML
+	public void removeQualitiesFromCharacter()
+	{
+		ArrayList<HBox> myCol = new ArrayList<HBox>();
+		int size = characterPosQualitiesList.getChildren().size();
+		for (int i = 0; i < size; i++)
+		{
+			if (((CheckBox) ((HBox) characterPosQualitiesList.getChildren().get(i)).getChildren().get(0)).isSelected())
+			{
+
+				String quality = ((Label) ((HBox) characterPosQualitiesList.getChildren().get(i)).getChildren().get(1)).getText();
+				DB_Quality qualityToRemove = QualityController.findQuality(quality, true);
+
+				if (qualityToRemove == null)
+					return;
+				int karmaCost = qualityToRemove.getKarmaCost();
+				int times = 1;
+
+				for (QualityController.qualitiesWithMultipleTimes q : QualityController.qualitiesWithMultipleTimes.values())
+				{
+					if (q.text.equals(qualityToRemove.getQuality()))
+					{
+						times = ((NumberSpinner) ((HBox) characterPosQualitiesList.getChildren().get(i)).getChildren().get(3)).getNumber()
+								.intValue();
+					}
+				}
+
+				if (qualityToRemove.isPositive())
+				{
+					ThingsToTrack.positiveQualitiesKarmaCost -= karmaCost * times;
+					posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+					ThingsToTrack.overallKarma += karmaCost * times;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				} else
+				{
+					ThingsToTrack.negativeQualitiesKarmaCost -= karmaCost * times;
+					negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+					ThingsToTrack.overallKarma -= karmaCost * times;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				}
+				myCol.add(((HBox) characterPosQualitiesList.getChildren().get(i)));
+			}
+		}
+		characterPosQualitiesList.getChildren().removeAll(myCol);
+
+		size = characterNegQualitiesList.getChildren().size();
+		for (int i = 0; i < size; i++)
+		{
+			if (((CheckBox) ((HBox) characterNegQualitiesList.getChildren().get(i)).getChildren().get(0)).isSelected())
+			{
+
+				String quality = ((Label) ((HBox) characterNegQualitiesList.getChildren().get(i)).getChildren().get(1)).getText();
+				DB_Quality qualityToRemove = QualityController.findQuality(quality, false);
+
+				if (qualityToRemove == null)
+					return;
+				int karmaCost = qualityToRemove.getKarmaCost();
+				int times = 1;
+
+				for (QualityController.qualitiesWithMultipleTimes q : QualityController.qualitiesWithMultipleTimes.values())
+				{
+					if (q.text.equals(qualityToRemove.getQuality()))
+					{
+						times = ((NumberSpinner) ((HBox) characterNegQualitiesList.getChildren().get(i)).getChildren().get(3)).getNumber()
+								.intValue();
+					}
+				}
+
+				if (qualityToRemove.isPositive())
+				{
+					ThingsToTrack.positiveQualitiesKarmaCost -= karmaCost * times;
+					posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+					ThingsToTrack.overallKarma += karmaCost * times;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				} else
+				{
+					ThingsToTrack.negativeQualitiesKarmaCost -= karmaCost * times;
+					negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+					ThingsToTrack.overallKarma -= karmaCost * times;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				}
+				myCol.add(((HBox) characterNegQualitiesList.getChildren().get(i)));
+			}
+		}
+		characterNegQualitiesList.getChildren().removeAll(myCol);
 	}
 
 	//////////////
@@ -256,6 +619,16 @@ public class MainMenuController implements Initializable
 	public void initialize(URL url, ResourceBundle rb)
 	{
 		startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+		skillKarma.set(Integer.toString(ThingsToTrack.karmaSpentOnSkills));
+		posQualityKarma.set(Integer.toString(ThingsToTrack.positiveQualitiesKarmaCost));
+		negQualityKarma.set(Integer.toString(ThingsToTrack.negativeQualitiesKarmaCost));
+
+		for (SKILL_GROUPS sg : SkillsController.SKILL_GROUPS.values())
+		{
+			sortSkills.getItems().add(sg.toString());
+		}
+		
+		sortSkills.setValue("ALL");
 
 		for (DB_Metatype m : Shadowrun_Globals.metatypes)
 		{
@@ -264,6 +637,7 @@ public class MainMenuController implements Initializable
 		metatypeBox.setPromptText("Select Metatype");
 		metatypeBox.valueProperty().addListener(new ChangeListener<String>()
 		{
+			@SuppressWarnings("rawtypes")
 			@Override
 			public void changed(ObservableValue ov, String t, String t1)
 			{
@@ -281,13 +655,20 @@ public class MainMenuController implements Initializable
 			addSkill(s);
 		}
 
-		for (DB_Quality q : Shadowrun_Globals.qualities)
+		for (DB_Quality q : Shadowrun_Globals.posQualities)
 		{
-			System.out.println(q.display());
-			addQuality(q);
+			addQuality(q, true);
+		}
+
+		for (DB_Quality q : Shadowrun_Globals.negQualities)
+		{
+			addQuality(q, false);
 		}
 
 		karmaLeftOver.textProperty().bind(startingKarma);
+		karmaSpentSkills.textProperty().bind(skillKarma);
+		karmaSpentPosQualities.textProperty().bind(posQualityKarma);
+		karmaSpentNegQualities.textProperty().bind(negQualityKarma);
 	}
 
 }

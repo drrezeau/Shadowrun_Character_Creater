@@ -17,7 +17,7 @@ public class DB_Quality
 	
 	public String display()
 	{
-		return "Quality: " + quality + "Karma Cost: " + karmaCost;
+		return "Quality: " + quality + " | Karma Cost: " + karmaCost;
 	}
 	
 	public String getQuality()
