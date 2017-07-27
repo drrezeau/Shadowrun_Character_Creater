@@ -84,14 +84,38 @@ public class DatabaseConnection
 				String type = rs.getString("type");
 				int karmaCost = rs.getInt("karmaCost");
 				boolean basic = rs.getBoolean("basic");
-				Shadowrun_Globals.metatypes.add(new DB_Metatype(type, karmaCost, basic));
+				int baseBody = rs.getInt("baseBody");
+				int baseAgility = rs.getInt("baseAgility");
+				int baseReaction = rs.getInt("baseReaction");
+				int baseStrength = rs.getInt("baseStrength");
+				int baseWillpower = rs.getInt("baseWillpower");
+				int baseLogic = rs.getInt("baseLogic");
+				int baseIntuition = rs.getInt("baseIntuition");
+				int baseCharisma = rs.getInt("baseCharisma");
+				int baseEdge = rs.getInt("baseEdge");
+
+				int endBody = rs.getInt("endBody");
+				int endAgility = rs.getInt("endAgility");
+				int endReaction = rs.getInt("endReaction");
+				int endStrength = rs.getInt("endStrength");
+				int endWillpower = rs.getInt("endWillpower");
+				int endLogic = rs.getInt("endLogic");
+				int endIntuition = rs.getInt("endIntuition");
+				int endCharisma = rs.getInt("endCharisma");
+				int endEdge = rs.getInt("endEdge");
+
+				String racialTraits = rs.getString("racialTraits");
+
+				Shadowrun_Globals.metatypes.add(new DB_Metatype(type, karmaCost, basic, baseBody, baseAgility, baseReaction, baseStrength,
+						baseWillpower, baseLogic, baseIntuition, baseCharisma, baseEdge, racialTraits, endBody, endAgility, endReaction,
+						endStrength, endWillpower, endLogic, endIntuition, endCharisma, endEdge));
 			}
 
 			conn.close();
 
 		} catch (ClassNotFoundException | SQLException e)
 		{
-			// TODO Auto-generated catch block
+			// TODO error logging
 			e.printStackTrace();
 		}
 	}

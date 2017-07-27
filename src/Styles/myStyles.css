@@ -58,3 +58,8 @@
 -fx-background-color: black;
 -fx-text-fill: white;
 }
+
+#TEST
+{
+	-fx-background-color:"white";
+}

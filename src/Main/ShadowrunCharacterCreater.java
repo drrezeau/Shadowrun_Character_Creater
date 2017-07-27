@@ -46,14 +46,14 @@ public class ShadowrunCharacterCreater extends Application {
    	 DatabaseConnection.loadQualities();
    	 
    	 
-   	 for (DB_Metatype m : Shadowrun_Globals.metatypes)
-   	 {
-   		 System.out.println(m.getType() + " " + m.getKarmaCost() + " " + m.isBasic());
-   	 }
-   	 for(DB_Skill s : Shadowrun_Globals.skills)
-   	 {
-   		 System.out.println(s.getSkill() + " " + s.getAssociatedAttr());
-   	 }
+//   	 for (DB_Metatype m : Shadowrun_Globals.metatypes)
+//   	 {
+//   		 m.display();
+//   	 }
+//   	 for(DB_Skill s : Shadowrun_Globals.skills)
+//   	 {
+//   		 System.out.println(s.getSkill() + " " + s.getAssociatedAttr());
+//   	 }
    	 
    	 launch(args);
     }

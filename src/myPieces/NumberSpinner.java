@@ -37,7 +37,7 @@ public class NumberSpinner extends HBox
 	public static final String			SPINNER_BUTTON_DOWN	= "SpinnerButtonDown";
 	private final String				BUTTONS_BOX			= "ButtonsBox";
 	private NumberTextField				numberField;
-	private ObjectProperty<BigDecimal>	stepWitdhProperty	= new SimpleObjectProperty<>();
+	private ObjectProperty<BigDecimal>	stepWidthProperty	= new SimpleObjectProperty<>();
 	private final double				ARROW_SIZE			= 4;
 	private final Button				incrementButton;
 	private final Button				decrementButton;
@@ -63,8 +63,6 @@ public class NumberSpinner extends HBox
 		this(BigDecimal.ONE, BigDecimal.ONE);
 		maxLimit = BigDecimal.valueOf(max);
 		minLimit = BigDecimal.valueOf(min);
-		
-		this.setPrefWidth(width);
 	}
 
 	public NumberSpinner(BigDecimal value, BigDecimal stepWidth)
@@ -76,11 +74,12 @@ public class NumberSpinner extends HBox
 	{
 		super();
 		this.setId(NUMBER_SPINNER);
-		this.stepWitdhProperty.set(stepWidth);
+		this.stepWidthProperty.set(stepWidth);
 
 		// TextField
 		numberField = new NumberTextField(value, nf);
 		numberField.setId(NUMBER_FIELD);
+		numberField.setPrefWidth(40);
 
 		// Enable arrow keys for dec/inc
 		numberField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>()
@@ -175,6 +174,9 @@ public class NumberSpinner extends HBox
 
 		buttons.getChildren().addAll(incPane, decPane);
 		this.getChildren().addAll(numberField, buttons);
+		numberField.setMaxWidth(40);
+		incPane.setMaxWidth(40);
+		this.setPrefWidth(numberField.getMaxWidth() + incPane.getMaxWidth());
 	}
 
 	/**
@@ -183,9 +185,9 @@ public class NumberSpinner extends HBox
 	public void increment()
 	{
 		BigDecimal value = numberField.getNumber();
-		if (maxLimit != value)
+		if (maxLimit.intValue() != value.intValue())
 		{
-			value = value.add(stepWitdhProperty.get());
+			value = value.add(stepWidthProperty.get());
 			numberField.setNumber(value);
 		}
 	}
@@ -196,13 +198,19 @@ public class NumberSpinner extends HBox
 	public void decrement()
 	{
 		BigDecimal value = numberField.getNumber();
-		if (minLimit != value)
+		if (minLimit.intValue() != value.intValue())
 		{
-			value = value.subtract(stepWitdhProperty.get());
+			value = value.subtract(stepWidthProperty.get());
 			numberField.setNumber(value);
 		}
 	}
 
+	public void setMinMax(int min, int max)
+	{
+		maxLimit = BigDecimal.valueOf(max);
+		minLimit = BigDecimal.valueOf(min);
+	}
+	
 	public final void setNumber(BigDecimal value)
 	{
 		numberField.setNumber(value);

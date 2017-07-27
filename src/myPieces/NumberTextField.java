@@ -49,6 +49,7 @@ public class NumberTextField extends TextField {
         this.nf = nf;
         initHandlers();
         setNumber(value);
+        this.setEditable(false);
     }
 
     private void initHandlers() {

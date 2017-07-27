@@ -24,10 +24,8 @@ public class SkillsController
 		case 6:
 			return 42;
 		default:
-
+			return 0;
 		}
-
-		return -1;
 	}
 
 }

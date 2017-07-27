@@ -27,8 +27,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import myPieces.DB_Metatype;
 import myPieces.DB_Quality;
 import myPieces.DB_Skill;
@@ -40,74 +42,109 @@ import myPieces.NumberSpinner;
  */
 public class MainMenuController implements Initializable
 {
-	SimpleStringProperty	startingKarma	= new SimpleStringProperty();
-	SimpleStringProperty	skillKarma		= new SimpleStringProperty();
-	SimpleStringProperty	posQualityKarma	= new SimpleStringProperty();
-	SimpleStringProperty	negQualityKarma	= new SimpleStringProperty();
+	SimpleStringProperty		startingKarma	= new SimpleStringProperty();
+	SimpleStringProperty		skillKarma		= new SimpleStringProperty();
+	SimpleStringProperty		posQualityKarma	= new SimpleStringProperty();
+	SimpleStringProperty		negQualityKarma	= new SimpleStringProperty();
+
+	SimpleStringProperty		charBod			= new SimpleStringProperty();
+	SimpleStringProperty		charAgil		= new SimpleStringProperty();
+	SimpleStringProperty		charRea			= new SimpleStringProperty();
+	SimpleStringProperty		charStr			= new SimpleStringProperty();
+	SimpleStringProperty		charWill		= new SimpleStringProperty();
+	SimpleStringProperty		charLog			= new SimpleStringProperty();
+	SimpleStringProperty		charInt			= new SimpleStringProperty();
+	SimpleStringProperty		charEdge		= new SimpleStringProperty();
+	SimpleStringProperty		charMag			= new SimpleStringProperty();
 
 	@FXML
-	VBox					skillsList;
+	VBox						skillsList;
 	@FXML
-	VBox					posQualitiesList;
+	VBox						posQualitiesList;
 	@FXML
-	VBox					negQualitiesList;
+	VBox						negQualitiesList;
 	@FXML
-	VBox					meleeWeaponsList;
+	VBox						meleeWeaponsList;
 	@FXML
-	VBox					rangedWeaponsList;
+	VBox						rangedWeaponsList;
 	@FXML
-	VBox					armorList;
+	VBox						armorList;
 	@FXML
-	VBox					AugmentationsList;
+	VBox						AugmentationsList;
 	@FXML
-	VBox					vehiclesList;
+	VBox						vehiclesList;
 
 	@FXML
-	VBox					characterSkillsList;
+	VBox						characterSkillsList;
 	@FXML
-	VBox					characterPosQualitiesList;
+	VBox						characterPosQualitiesList;
 	@FXML
-	VBox					characterNegQualitiesList;
+	VBox						characterNegQualitiesList;
 	@FXML
-	VBox					characterMeleeWeaponsList;
+	VBox						characterMeleeWeaponsList;
 	@FXML
-	VBox					characterRangedWeaponsList;
+	VBox						characterRangedWeaponsList;
 	@FXML
-	VBox					characterArmorList;
+	VBox						characterArmorList;
 	@FXML
-	VBox					characterAugmentationsList;
+	VBox						characterAugmentationsList;
 	@FXML
-	VBox					characterVehiclesList;
+	VBox						characterVehiclesList;
 
 	///////////////////
 	// Character Tab //
 	///////////////////
 	@FXML
-	TextField				playerName;
+	TextField					playerName;
 	@FXML
-	TextField				characterName;
+	TextField					characterName;
 	@FXML
-	TextField				characterAlias;
+	TextField					characterAlias;
 	@FXML
-	ComboBox<String>		metatypeBox;
+	ComboBox<String>			metatypeBox;
+
+	@FXML
+	GridPane					attrbutesDisplay;
+
+	public static NumberSpinner	bodyRating		= new NumberSpinner(1, 2);
+	public static NumberSpinner	agilityRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	reactionRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	strengthRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	willpowerRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	logicRating		= new NumberSpinner(1, 1);
+	public static NumberSpinner	intuitionRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	charismaRating	= new NumberSpinner(1, 1);
+	public static NumberSpinner	edgeRating		= new NumberSpinner(1, 1);
+	public static NumberSpinner	magicRating		= new NumberSpinner(1, 1);
+
+	public static Label			maxBodyLabel	= new Label("/6");
+	public static Label			maxAgilLabel	= new Label("/6");
+	public static Label			maxReaLabel		= new Label("/6");
+	public static Label			maxStrLabel		= new Label("/6");
+	public static Label			maxWillLabel	= new Label("/6");
+	public static Label			maxLogLabel		= new Label("/6");
+	public static Label			maxIntLabel		= new Label("/6");
+	public static Label			maxCharLabel	= new Label("/6");
+	public static Label			maxEdgeLabel	= new Label("/6");
+	public static Label			maxMagicLabel	= new Label("/6");
 
 	////////////////
 	// Skills Tab //
 	////////////////
 	@FXML
-	ComboBox<String>		sortSkills;
+	ComboBox<String>			sortSkills;
 
 	/////////////////////
 	// Things To Track //
 	/////////////////////
 	@FXML
-	Label					karmaLeftOver;
+	Label						karmaLeftOver;
 	@FXML
-	Label					karmaSpentSkills;
+	Label						karmaSpentSkills;
 	@FXML
-	Label					karmaSpentPosQualities;
+	Label						karmaSpentPosQualities;
 	@FXML
-	Label					karmaSpentNegQualities;
+	Label						karmaSpentNegQualities;
 
 	/////////////////
 	// Used By All //
@@ -615,6 +652,43 @@ public class MainMenuController implements Initializable
 	// Next one //
 	//////////////
 
+	////////////////////
+	// Characters Tab //
+	////////////////////
+
+	public HBox createAttributeDisplay(String attributeLabel, NumberSpinner attributeRating, Label endLabel)
+	{
+		Label label = new Label(attributeLabel);
+		label.setMinWidth(100);
+		endLabel.setMinWidth(30);
+		HBox display = new HBox();
+		display.getChildren().addAll(label, attributeRating, endLabel);
+		
+		attributeRating.getNumberField().textProperty().addListener(new ChangeListener<Object>()
+		{
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void changed(ObservableValue arg0, Object arg1, Object arg2)
+			{
+				if (!CharacterController.doNotChangeKarma)
+				{
+					int currentRatingCost = CharacterController.getAttributeCost(Integer.parseInt((String) arg1));
+					int newRatingCost = CharacterController.getAttributeCost(Integer.parseInt((String) arg2));
+	
+					int totalCost = newRatingCost - currentRatingCost;
+					
+					ThingsToTrack.karmaSpentOnAttributes += totalCost;
+					ThingsToTrack.overallKarma = ThingsToTrack.overallKarma - totalCost;
+					startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
+				}
+			}
+		});
+		
+		display.setAlignment(Pos.CENTER);
+
+		return display;
+	}
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -627,13 +701,26 @@ public class MainMenuController implements Initializable
 		{
 			sortSkills.getItems().add(sg.toString());
 		}
-		
+
 		sortSkills.setValue("ALL");
 
 		for (DB_Metatype m : Shadowrun_Globals.metatypes)
 		{
 			metatypeBox.getItems().add(m.getType() + " " + m.getKarmaCost());
 		}
+
+		attrbutesDisplay.add(createAttributeDisplay("Body", bodyRating, maxBodyLabel), 0, 0);
+		attrbutesDisplay.add(createAttributeDisplay("Agility", agilityRating, maxAgilLabel), 0, 1);
+		attrbutesDisplay.add(createAttributeDisplay("Reaction", reactionRating, maxReaLabel), 0, 2);
+		attrbutesDisplay.add(createAttributeDisplay("Strength", strengthRating, maxStrLabel), 0, 3);
+		attrbutesDisplay.add(createAttributeDisplay("Willpower", willpowerRating, maxWillLabel), 0, 4);
+		attrbutesDisplay.add(createAttributeDisplay("Logic", logicRating, maxLogLabel), 1, 0);
+		attrbutesDisplay.add(createAttributeDisplay("Intuition", intuitionRating, maxIntLabel), 1, 1);
+		attrbutesDisplay.add(createAttributeDisplay("Charisma", charismaRating, maxCharLabel), 1, 2);
+		attrbutesDisplay.add(createAttributeDisplay("Edge", edgeRating, maxEdgeLabel), 1, 3);
+		attrbutesDisplay.add(createAttributeDisplay("Magic", magicRating, maxMagicLabel), 1, 4);
+
+		MainMenuController.magicRating.setDisable(true);
 		metatypeBox.setPromptText("Select Metatype");
 		metatypeBox.valueProperty().addListener(new ChangeListener<String>()
 		{
@@ -641,8 +728,13 @@ public class MainMenuController implements Initializable
 			@Override
 			public void changed(ObservableValue ov, String t, String t1)
 			{
+				CharacterController.setAttributeValues(t1.split(" ")[0]);
+
 				int spot = metatypeBox.getItems().indexOf(t1);
 				ThingsToTrack.overallKarma = ThingsToTrack.overallKarma + ThingsToTrack.metatypeKarmaCost;
+				ThingsToTrack.overallKarma += ThingsToTrack.karmaSpentOnAttributes;
+				// Reset karma spent on attributes
+				ThingsToTrack.karmaSpentOnAttributes = 0;
 				ThingsToTrack.metatypeKarmaCost = Shadowrun_Globals.metatypes.get(spot).getKarmaCost();
 				ThingsToTrack.overallKarma = ThingsToTrack.overallKarma - ThingsToTrack.metatypeKarmaCost;
 				startingKarma.set(Integer.toString(ThingsToTrack.overallKarma));
@@ -651,7 +743,7 @@ public class MainMenuController implements Initializable
 
 		for (DB_Skill s : Shadowrun_Globals.skills)
 		{
-			System.out.println(s.getSkill() + " " + s.getAssociatedAttr());
+//			System.out.println(s.getSkill() + " " + s.getAssociatedAttr());
 			addSkill(s);
 		}
 
@@ -670,5 +762,4 @@ public class MainMenuController implements Initializable
 		karmaSpentPosQualities.textProperty().bind(posQualityKarma);
 		karmaSpentNegQualities.textProperty().bind(negQualityKarma);
 	}
-
 }
