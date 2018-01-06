@@ -15,7 +15,7 @@ public class DatabaseConnection
 {
 
 	private static final String	LAPTOP	= "jdbc:h2:C:/Users/david_000/Google Drive/Shadowrun_Character_Creater/shadowrun_character_creater";
-	private static final String	DESKTOP	= "jdbc:h2:C:/Users/c/Google Drive/Shadowrun_Character_Creater/shadowrun_character_creater";
+	private static final String	DESKTOP	= "jdbc:h2:C:\\Users\\david\\Google Drive\\Shadowrun_Character_Creater/shadowrun_character_creater";
 
 	public static void loadQualities()
 	{
